@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Shader Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .back-button-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+            background: linear-gradient(45deg, #ffed4e, #fff200);
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #fff200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #ffd700;
+            opacity: 0.9;
+        }
+
+        .shader-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .shader-card {
+            background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shader-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .shader-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
+        }
+
+        .shader-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .shader-title {
+            font-size: 1.4rem;
+            color: #ffd700;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .shader-description {
+            color: #ccc;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .shader-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .shader-features li {
+            color: #aaa;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .shader-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .download-btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #000;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .stats {
+            background: linear-gradient(145deg, #333, #2a2a2a);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .stats h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 215, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #ccc;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .shader-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .back-button-container {
+                position: static;
+                margin-bottom: 20px;
+            }
+
+            .back-btn {
+                font-size: 0.9rem;
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="back-button-container">
+                <a href="minecraft.html" class="back-btn">← Zurück zu Minecraft</a>
+            </div>
+            <h1>Minecraft Shader Collection</h1>
+            <p>Die beste Sammlung von 25 Premium Minecraft Shadern</p>
+        </div>
+
+        <div class="shader-grid">
+            <div class="shader-card">
+                <h3 class="shader-title">Complementary Shaders – Reimagined</h3>
+                <p class="shader-description">Hyperrealistische Beleuchtung und Schatten für ein cinematisches Minecraft-Erlebnis.</p>
+                <ul class="shader-features">
+                    <li>Dynamische Schatten</li>
+                    <li>Volumetrische Beleuchtung</li>
+                    <li>Realistische Wasserreflektionen</li>
+                </ul>
+                <a href="https://modrinth.com/shader/complementary-reimagined" class="download-btn" target="_blank">Download Complementary Reimagined</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">BSL Shaders</h3>
+                <p class="shader-description">Beliebter Shader mit ausgewogener Performance und visueller Qualität.</p>
+                <ul class="shader-features">
+                    <li>Optimierte Performance</li>
+                    <li>Schöne Wolken</li>
+                    <li>Realistische Atmosphäre</li>
+                </ul>
+                <a href="https://modrinth.com/shader/bsl-shaders" class="download-btn" target="_blank">Download BSL Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Complementary Shaders – Unbound</h3>
+                <p class="shader-description">Erweiterte Version mit unbegrenzten visuellen Möglichkeiten.</p>
+                <ul class="shader-features">
+                    <li>Erweiterte Features</li>
+                    <li>Anpassbare Einstellungen</li>
+                    <li>High-End Grafik</li>
+                </ul>
+                <a href="https://modrinth.com/shader/complementary-unbound" class="download-btn" target="_blank">Download Complementary Unbound</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Rethinking Voxels</h3>
+                <p class="shader-description">Innovative Herangehensweise an Minecraft's Voxel-Rendering.</p>
+                <ul class="shader-features">
+                    <li>Voxel-basierte Effekte</li>
+                    <li>Einzigartige Beleuchtung</li>
+                    <li>Moderne Rendering-Techniken</li>
+                </ul>
+                <a href="https://modrinth.com/shader/rethinking-voxels" class="download-btn" target="_blank">Download Rethinking Voxels</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Solas Shader</h3>
+                <p class="shader-description">Wunderschöne Lichtsimulation mit natürlichen Farben.</p>
+                <ul class="shader-features">
+                    <li>Natürliche Beleuchtung</li>
+                    <li>Realistische Farben</li>
+                    <li>Smooth Performance</li>
+                </ul>
+                <a href="https://modrinth.com/shader/solas-shader" class="download-btn" target="_blank">Download Solas Shader</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">MakeUp – Ultra Fast (Potato)</h3>
+                <p class="shader-description">Optimiert für schwächere PCs ohne Qualitätsverlust bei wichtigen Features.</p>
+                <ul class="shader-features">
+                    <li>60+ FPS garantiert</li>
+                    <li>Niedrige GPU-Belastung</li>
+                    <li>Verbesserte Sichtweite</li>
+                </ul>
+                <a href="https://modrinth.com/shader/makeup-ultra-fast" class="download-btn" target="_blank">Download MakeUp Ultra Fast</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Photon Shaders</h3>
+                <p class="shader-description">Realistische Lichtstreuung und Photonenbasierte Beleuchtung.</p>
+                <ul class="shader-features">
+                    <li>Photorealistisch</li>
+                    <li>Erweiterte Lichtsimulation</li>
+                    <li>Cinematic Effects</li>
+                </ul>
+                <a href="https://modrinth.com/shader/photon-shaders" class="download-btn" target="_blank">Download Photon Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Super Duper Vanilla</h3>
+                <p class="shader-description">Vanilla-inspiriert mit subtilen Verbesserungen.</p>
+                <ul class="shader-features">
+                    <li>Vanilla-Look beibehalten</li>
+                    <li>Subtile Verbesserungen</li>
+                    <li>Hohe Kompatibilität</li>
+                </ul>
+                <a href="https://modrinth.com/shader/super-duper-vanilla" class="download-btn" target="_blank">Download Super Duper Vanilla</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Insanity Shader</h3>
+                <p class="shader-description">Extreme visuelle Effekte für das ultimative Erlebnis.</p>
+                <ul class="shader-features">
+                    <li>Extreme Effekte</li>
+                    <li>Maximale Qualität</li>
+                    <li>Für High-End PCs</li>
+                </ul>
+                <a href="https://modrinth.com/shader/insanity-shader" class="download-btn" target="_blank">Download Insanity Shader</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Bliss Shaders</h3>
+                <p class="shader-description">Friedliche und beruhigende Atmosphäre mit sanften Übergängen.</p>
+                <ul class="shader-features">
+                    <li>Beruhigende Atmosphäre</li>
+                    <li>Sanfte Übergänge</li>
+                    <li>Entspanntes Gaming</li>
+                </ul>
+                <a href="https://modrinth.com/shader/bliss-shaders" class="download-btn" target="_blank">Download Bliss Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">AstraLex Shaders</h3>
+                <p class="shader-description">Weltraum-inspirierte Effekte mit galaktischen Elementen.</p>
+                <ul class="shader-features">
+                    <li>Weltraum-Thema</li>
+                    <li>Galaktische Effekte</li>
+                    <li>Sterne und Nebel</li>
+                </ul>
+                <a href="https://modrinth.com/shader/astralex-shaders" class="download-btn" target="_blank">Download AstraLex Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Pastel Shaders</h3>
+                <p class="shader-description">Sanfte Pastellfarben für eine traumhafte und entspannende Spielerfahrung.</p>
+                <ul class="shader-features">
+                    <li>Pastellfarben</li>
+                    <li>Weiche Übergänge</li>
+                    <li>Traumhafte Atmosphäre</li>
+                </ul>
+                <a href="https://modrinth.com/shader/pastel-shaders" class="download-btn" target="_blank">Download Pastel Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">VanillAA</h3>
+                <p class="shader-description">Anti-Aliasing für Minecraft mit Vanilla-Gefühl.</p>
+                <ul class="shader-features">
+                    <li>Anti-Aliasing</li>
+                    <li>Glatte Kanten</li>
+                    <li>Vanilla-kompatibel</li>
+                </ul>
+                <a href="https://modrinth.com/shader/vanillaa" class="download-btn" target="_blank">Download VanillAA</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Shrimple</h3>
+                <p class="shader-description">Einfacher aber effektiver Shader für alle Spielertypen.</p>
+                <ul class="shader-features">
+                    <li>Einfach zu verwenden</li>
+                    <li>Stabile Performance</li>
+                    <li>Universell einsetzbar</li>
+                </ul>
+                <a href="https://modrinth.com/shader/shrimple" class="download-btn" target="_blank">Download Shrimple</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">FastPBR</h3>
+                <p class="shader-description">Schnelle PBR-Implementierung für bessere Materialien.</p>
+                <ul class="shader-features">
+                    <li>PBR-Materialien</li>
+                    <li>Realistische Texturen</li>
+                    <li>Optimierte Performance</li>
+                </ul>
+                <a href="https://modrinth.com/shader/fastpbr" class="download-btn" target="_blank">Download FastPBR</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Nostalgia Shader</h3>
+                <p class="shader-description">Retro-Feeling mit nostalgischen Effekten und warmen Farben.</p>
+                <ul class="shader-features">
+                    <li>Retro-Atmosphäre</li>
+                    <li>Nostalgische Effekte</li>
+                    <li>Warme Farbpalette</li>
+                </ul>
+                <a href="https://modrinth.com/shader/nostalgia-shader" class="download-btn" target="_blank">Download Nostalgia Shader</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Kappa Shader</h3>
+                <p class="shader-description">Hochwertige Schatten und Beleuchtung für anspruchsvolle Spieler.</p>
+                <ul class="shader-features">
+                    <li>Hochwertige Schatten</li>
+                    <li>Realistische Beleuchtung</li>
+                    <li>Anspruchsvolle Grafik</li>
+                </ul>
+                <a href="https://modrinth.com/shader/kappa-shader" class="download-btn" target="_blank">Download Kappa Shader</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Miniature Shader</h3>
+                <p class="shader-description">Tilt-Shift Effekt für Miniatur-Welten und kreative Screenshots.</p>
+                <ul class="shader-features">
+                    <li>Tilt-Shift Effekt</li>
+                    <li>Miniatur-Look</li>
+                    <li>Kreative Screenshots</li>
+                </ul>
+                <a href="https://modrinth.com/shader/miniature-shader" class="download-btn" target="_blank">Download Miniature Shader</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Lux V1</h3>
+                <p class="shader-description">Luxuriöse Beleuchtung mit professionellen Rendering-Features.</p>
+                <ul class="shader-features">
+                    <li>Luxuriöse Beleuchtung</li>
+                    <li>Professionelle Features</li>
+                    <li>High-End Rendering</li>
+                </ul>
+                <a href="https://modrinth.com/shader/lux-v1" class="download-btn" target="_blank">Download Lux V1</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Noble Shaders</h3>
+                <p class="shader-description">Edle und raffinierte Optik für anspruchsvolle Builds.</p>
+                <ul class="shader-features">
+                    <li>Edle Optik</li>
+                    <li>Raffinierte Effekte</li>
+                    <li>Anspruchsvolle Ästhetik</li>
+                </ul>
+                <a href="https://modrinth.com/shader/noble/versions" class="download-btn" target="_blank">Download Noble Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Sildur's Vibrant Shaders</h3>
+                <p class="shader-description">Lebendige Farben und dynamische Beleuchtung für ein farbenfrohes Erlebnis.</p>
+                <ul class="shader-features">
+                    <li>Lebendige Farben</li>
+                    <li>Dynamische Beleuchtung</li>
+                    <li>Beliebter Klassiker</li>
+                </ul>
+                <a href="https://www.curseforge.com/minecraft/shaders/sildurs-vibrant-shaders" class="download-btn" target="_blank">Download Sildur's Vibrant</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">SEUS Renewed</h3>
+                <p class="shader-description">Sonic Ether's Unbelievable Shaders - der legendäre Shader modernisiert.</p>
+                <ul class="shader-features">
+                    <li>Legendärer Shader</li>
+                    <li>Modernisiert</li>
+                    <li>Unglaubliche Qualität</li>
+                </ul>
+                <a href="https://minecraftshader.com/download/seus-renewed/" class="download-btn" target="_blank">Download SEUS Renewed</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Chocapic's Shaders</h3>
+                <p class="shader-description">Beliebte Shader-Familie mit verschiedenen Qualitätsstufen.</p>
+                <ul class="shader-features">
+                    <li>Verschiedene Versionen</li>
+                    <li>Anpassbare Qualität</li>
+                    <li>Community-Favorit</li>
+                </ul>
+                <a href="https://www.curseforge.com/minecraft/shaders/chocapic13-shaders" class="download-btn" target="_blank">Download Chocapic's Shaders</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Project LUMA</h3>
+                <p class="shader-description">Fortgeschrittene Beleuchtung und Schatten mit wissenschaftlichem Ansatz.</p>
+                <ul class="shader-features">
+                    <li>Wissenschaftlicher Ansatz</li>
+                    <li>Fortgeschrittene Beleuchtung</li>
+                    <li>Realistische Physik</li>
+                </ul>
+                <a href="https://www.curseforge.com/minecraft/shaders/projectluma" class="download-btn" target="_blank">Download Project LUMA</a>
+            </div>
+
+            <div class="shader-card">
+                <h3 class="shader-title">Vanilla Plus Shader</h3>
+                <p class="shader-description">Vanilla Minecraft mit subtilen Verbesserungen und modernen Features.</p>
+                <ul class="shader-features">
+                    <li>Vanilla+ Erfahrung</li>
+                    <li>Subtile Verbesserungen</li>
+                    <li>Moderne Features</li>
+                </ul>
+                <a href="https://modrinth.com/shader/vanilla-plus-shader" class="download-btn" target="_blank">Download Vanilla Plus</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h2>Statistiken</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">Premium Shader</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Kostenlos</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">All</div>
+                    <div class="stat-label">Working</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.7★</div>
+                    <div class="stat-label">Rating</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scroll and button animations
+        document.querySelectorAll('.download-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                // Add click animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.05)';
+                }, 100);
+                
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+
+        // Add floating animation to cards
+        document.querySelectorAll('.shader-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Add some dynamic effects
+        const cards = document.querySelectorAll('.shader-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.borderColor = '#ffd700';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.borderColor = 'transparent';
+            });
+        });
+    </script>
+</body>
+</html>

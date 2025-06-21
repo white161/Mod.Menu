@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politische Ideologien & Gesellschaftstheorien</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #262525;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: rgba(227, 222, 222, 0.3);
+            border: 1px solid rgba(233, 221, 221, 0.5);
+            transform: translateY(-2px);
+            text-decoration: none;
+            color: white;
+        }
+
+        .back-button::before {
+            content: '←';
+            font-size: 1.2em;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #1616a9 0%, #05ac88 100%);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h2 {
+            color: #ffffff;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #444;
+        }
+
+        .definition {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .definition h3 {
+            color: #495057;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .key-points {
+            margin-top: 15px;
+        }
+
+        .key-points h4 {
+            color: #6c757d;
+            font-size: 1em;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            background: #e9ecef;
+            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .key-points li::before {
+            content: '•';
+            color: #667eea;
+            font-weight: bold;
+            position: absolute;
+            left: 12px;
+        }
+
+        .spectrum {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: linear-gradient(90deg, #ff0000, #b57e08, #1616a9, #05ac88);
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* PDF Button Styles */
+        .pdf-button-container {
+            display: flex;
+            justify-content: center;
+            margin: 50px 0 30px 0;
+            padding: 20px;
+        }
+
+        .pdf-button {
+            position: relative;
+            padding: 18px 35px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-weight: 600;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .pdf-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .pdf-button:hover::before {
+            left: 100%;
+        }
+
+        .pdf-button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+            color: white;
+        }
+
+        .pdf-button::after {
+            content: '📄';
+            font-size: 1.3em;
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-button:hover::after {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+       
+
+        /* Pulsing effect */
+        @keyframes pulse {
+            0% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2); }
+            100% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
+        }
+
+        .pdf-button:not(:hover) {
+            animation: pulse 3s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+
+            .back-button {
+                top: 10px;
+                left: 10px;
+                padding: 8px 15px;
+                font-size: 0.9em;
+            }
+
+            .pdf-button {
+                padding: 15px 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="Politisches Sheet.html" class="back-button">Zurück zum Politischen Sheet</a>
+    
+    <div class="container">
+        <header>
+            <h1>Politische Ideologien & Gesellschaftstheorien</h1>
+            <p class="subtitle">Eine Übersicht über verschiedene politische Strömungen und ihre Kernprinzipien</p>
+        </header>
+
+        <div class="spectrum">
+            <span>Links</span>
+            <span style="background: rgba(0,0,0,0.8); padding: 5px 10px; border-radius: 15px; font-size: 0.9em;">⚠️ Die "politische Mitte" ist keine Richtige Einstellung - jede Position ist ideologisch geprägt</span>
+            <span>Rechts</span>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterCards('all')">Alle</button>
+            <button class="filter-btn" onclick="filterCards('links')">Linke Ideologien</button>
+            <button class="filter-btn" onclick="filterCards('buergerlich')">Bürgerliche Ideologien</button>
+            <button class="filter-btn" onclick="filterCards('rechts')">Rechte Ideologien</button>
+            <button class="filter-btn" onclick="filterCards('extrem')">Extremismus</button>
+        </div>
+
+        <div class="grid" id="cardGrid">
+            <div class="card" data-category="buergerlich">
+                <h2>Konservatismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Politische Philosophie, die traditionelle Werte, Institutionen und gesellschaftliche Strukturen bewahren möchte.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Kernprinzipien:</h4>
+                    <ul>
+                        <li>Bewahrung bewährter Traditionen</li>
+                        <li>Graduelle statt radikale Veränderungen</li>
+                        <li>Starke staatliche Autorität</li>
+                        <li>Familienwerte und religiöse Prinzipien</li>
+                        <li>Eigenverantwortung und Privateigentum</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="buergerlich">
+                <h2>Liberalismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Politische Philosophie, die individuelle Freiheiten, Gleichberechtigung und begrenzte Regierungsmacht betont.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Kernprinzipien:</h4>
+                    <ul>
+                        <li>Individuelle Grund- und Menschenrechte</li>
+                        <li>Demokratie und Rechtsstaatlichkeit</li>
+                        <li>Marktwirtschaft mit sozialer Komponente</li>
+                        <li>Gewaltenteilung</li>
+                        <li>Toleranz und Pluralismus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="extrem">
+                <h2>Linksextremismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Radikale politische Strömung, die das bestehende demokratische System ablehnt und eine revolutionäre Umgestaltung anstrebt.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Merkmale:</h4>
+                    <ul>
+                        <li>Ablehnung der parlamentarischen Demokratie</li>
+                        <li>Revolutionäre Gewalt als Mittel</li>
+                        <li>Klassenkampf-Ideologie</li>
+                        <li>Anti-Kapitalismus</li>
+                        <li>Internationalismus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="rechts">
+                <h2>Nationalismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Ideologie, die die Nation als höchsten politischen Wert betrachtet und nationale Interessen über andere stellt.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Charakteristika:</h4>
+                    <ul>
+                        <li>Betonung nationaler Identität</li>
+                        <li>Kulturelle Homogenität angestrebt</li>
+                        <li>Skeptisch gegenüber Internationalismus</li>
+                        <li>Nationale Souveränität</li>
+                        <li>Oft verbunden mit Patriotismus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="buergerlich">
+                <h2>Patriotismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Liebe und Loyalität zum eigenen Land, seinen Werten und Institutionen, ohne andere Nationen abzuwerten.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Eigenschaften:</h4>
+                    <ul>
+                        <li>Verfassungspatriotismus</li>
+                        <li>Respekt für demokratische Werte</li>
+                        <li>Kritische Reflexion der Geschichte</li>
+                        <li>Bürgerstolz und Engagement</li>
+                        <li>Unterschied zu Nationalismus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="rechts">
+                <h2>Populismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Politischer Stil, der einfache Lösungen verspricht und "das Volk" gegen "die Elite" mobilisiert.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Merkmale:</h4>
+                    <ul>
+                        <li>Volk vs. Elite Rhetorik</li>
+                        <li>Vereinfachung komplexer Probleme</li>
+                        <li>Emotionale Ansprache</li>
+                        <li>Anti-Establishment Haltung</li>
+                        <li>Charismatische Führungsfiguren</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="extrem">
+                <h2>Rechtsextremismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Radikale politische Ideologie, die Demokratie, Menschenrechte und Gleichberechtigung grundsätzlich ablehnt.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Kennzeichen:</h4>
+                    <ul>
+                        <li>Ablehnung der Demokratie</li>
+                        <li>Autoritäres Führerprinzip</li>
+                        <li>Rassismus und Fremdenfeindlichkeit</li>
+                        <li>Gewaltbereitschaft</li>
+                        <li>Geschichtsrevisionismus</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="rechts">
+                <h2>Rechtspopulismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Populistische Bewegung mit konservativen bis nationalistischen Positionen, die oft Migrationskritik betont.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Eigenschaften:</h4>
+                    <ul>
+                        <li>Migrationsskeptische Haltung</li>
+                        <li>EU-Kritik</li>
+                        <li>Traditionelle Werte betont</li>
+                        <li>Medien- und Expertenkritik</li>
+                        <li>Direkte Demokratie gefordert</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="links">
+                <h2>Sozialismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Wirtschafts- und Gesellschaftssystem, das auf gesellschaftlichem Eigentum und demokratischer Kontrolle basiert.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Grundsätze:</h4>
+                    <ul>
+                        <li>Gesellschaftliches Eigentum</li>
+                        <li>Soziale Gerechtigkeit</li>
+                        <li>Umverteilung des Wohlstands</li>
+                        <li>Arbeiterrechte</li>
+                        <li>Demokratische Wirtschaftsplanung</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="extrem">
+                <h2>Stalinismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Autoritäre Form des Kommunismus, geprägt von zentralisierter Macht und staatlicher Unterdrückung.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Charakteristika:</h4>
+                    <ul>
+                        <li>Einparteiendiktatur</li>
+                        <li>Persönlichkeitskult</li>
+                        <li>Zentrale Planwirtschaft</li>
+                        <li>Staatsterror und Repression</li>
+                        <li>Kollektivierung</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" data-category="links">
+                <h2>Marxismus</h2>
+                <div class="definition">
+                    <h3>Definition:</h3>
+                    <p>Gesellschaftstheorie von Karl Marx, die den Kapitalismus kritisch analysiert und eine klassenlose Gesellschaft anstrebt.</p>
+                </div>
+                <div class="key-points">
+                    <h4>Kerntheorien:</h4>
+                    <ul>
+                        <li>Historischer Materialismus</li>
+                        <li>Klassenkampf-Theorie</li>
+                        <li>Mehrwert-Theorie</li>
+                        <li>Entfremdung der Arbeit</li>
+                        <li>Dialektische Methode</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- PDF Button -->
+        <div class="pdf-button-container">
+            <a href="#" class="pdf-button" onclick="downloadPDF()">
+                Vollständiges PDF herunterladen
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function filterCards(category) {
+            const cards = document.querySelectorAll('.card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update active button
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else if (category === 'buergerlich') {
+                    if (card.dataset.category === 'buergerlich') {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.5s ease';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                } else {
+                    if (card.dataset.category === category) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.5s ease';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        function downloadPDF() {
+            // Hier würden Sie normalerweise den Link zu Ihrem PDF einfügen
+            // Beispiel: window.open('path/to/your/political-ideologies.pdf', '_blank');
+            
+            // Für Demo-Zwecke:
+            alert('PDF-Download würde hier starten!\n\nBitte ersetzen Sie die downloadPDF() Funktion mit dem korrekten Pfad zu Ihrer PDF-Datei.');
+            
+            // Beispiel für echten PDF-Download:
+            // const link = document.createElement('a');
+            // link.href = 'path/to/your/political-ideologies.pdf';
+            // link.download = 'Politische-Ideologien.pdf';
+            // link.click();
+        }
+
+        // Add smooth scrolling and entrance animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body>
+</html>

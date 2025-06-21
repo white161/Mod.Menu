@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rocket League Mods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a1a0a, #1a2e1a, #16213e, #0f4660, #338353);
+      color: #fff;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #4CAF50, #2196F3, #4CAF50);
+      z-index: 1000;
+      animation: borderPulse 3s infinite ease-in-out;
+    }
+    body::before { left: 0; }
+    body::after { right: 0; animation-direction: reverse; }
+
+    @keyframes borderPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(45deg, #4CAF50, #2196F3);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      text-decoration: none;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    .back-btn:hover { transform: scale(1.05); }
+
+    h1 {
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin: 60px 0 30px 0;
+      text-align: center;
+      background: linear-gradient(45deg, #4CAF50, #2196F3, #4CAF50, #2196F3);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientShift 3s ease infinite;
+    }
+
+    @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      display: block;
+      padding: 12px 20px;
+      border: 2px solid transparent;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 25px;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .search-box:focus { border-color: #4CAF50; }
+    .search-box::placeholder { color: #bbb; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 2px solid rgba(76, 175, 80, 0.3);
+      background: rgba(15, 25, 15, 0.5);
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: linear-gradient(45deg, #4CAF50, #2196F3);
+      border-color: transparent;
+      transform: translateY(-2px);
+    }
+
+    .mod-card {
+      background: linear-gradient(135deg, rgba(15, 25, 15, 0.6), rgba(25, 35, 25, 0.4));
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+      transition: all 0.4s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .mod-card:hover { 
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(76, 175, 80, 0.25);
+      border-color: rgba(76, 175, 80, 0.4);
+    }
+    .mod-card.hidden { display: none; }
+
+    .card-header {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      position: relative;
+      background-size: cover;
+    }
+
+    .category {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 3;
+    }
+
+    .card-content { padding: 20px; }
+
+    h3 {
+      font-weight: 700;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(45deg, #4CAF50, #2196F3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p { margin-bottom: 15px; color: #ddd; line-height: 1.6; }
+
+    .features, .requirements {
+      font-size: 0.85rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 3px solid;
+    }
+    .features { 
+      background: rgba(33, 150, 243, 0.1); 
+      border-color: #2196F3; 
+      color: #bbb; 
+    }
+    .requirements { 
+      background: rgba(76, 175, 80, 0.1); 
+      border-color: #4CAF50; 
+      color: #bbb; 
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .download-btn:hover { transform: scale(1.05) translateY(-2px); }
+    .download-btn::after { content: "⮧"; }
+
+    .my-pack-btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #FF6B35, #F7931E, #FFD700);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .my-pack-btn:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+    }
+    .my-pack-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    .my-pack-btn:hover::before { left: 100%; }
+
+    .rating { color: #4CAF50; font-weight: bold; margin-left: 10px; }
+    .download-count { font-size: 0.75rem; color: #aaa; margin-top: 5px; }
+
+    /* Farbschema */
+    .rl-green { background: linear-gradient(45deg, #4CAF50, #66BB6A); }
+    .rl-blue { background: linear-gradient(45deg, #2196F3, #42A5F5); }
+    .rl-teal { background: linear-gradient(45deg, #009688, #26A69A); }
+    .rl-cyan { background: linear-gradient(45deg, #00BCD4, #26C6DA); }
+    .rl-indigo { background: linear-gradient(45deg, #3F51B5, #5C6BC0); }
+    .rl-emerald { background: linear-gradient(45deg, #00C853, #00E676); }
+
+    @media (max-width: 768px) {
+      body { padding: 15px; }
+      .back-btn { position: static; margin-bottom: 20px; }
+      h1 { margin-top: 20px; }
+      body::before, body::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="Mod.Menu.html" class="back-btn">← Zurück</a>
+  <h1>Rocket League Mods</h1>
+  
+  <input type="text" class="search-box" placeholder="Mods suchen..." id="searchBox">
+  
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Alle</button>
+    <button class="filter-btn" data-filter="visual">Visual</button>
+    <button class="filter-btn" data-filter="gameplay">Gameplay</button>
+    <button class="filter-btn" data-filter="training">Training</button>
+    <button class="filter-btn" data-filter="utility">Utility</button>
+    <button class="filter-btn" data-filter="social">Social</button>
+  </div>
+
+  <div style="text-align: center; margin-bottom: 30px;">
+    <a href="my-pack.html" class="my-pack-btn">📦 My Pack - Alle Mods zusammen downloaden</a>
+  </div>
+
+  <div class="mod-card" data-category="visual">
+    <div class="card-header rl-green">
+      <div class="category rl-green">Visual</div>
+      AlphaConsole Interface
+    </div>
+    <div class="card-content">
+      <h3>AlphaConsole <span class="rating">⭐ 4.8</span></h3>
+      <p>Der ultimative Mod für Rocket League! Ändere dein Auto-Design, nutze Items aus der Esports-Shop und passe deine Optik komplett an.</p>
+      <div class="features"><strong>Features:</strong> Custom Items, Esports Decals, Titel ändern, Rank-Icons</div>
+      <div class="requirements"><strong>Benötigt:</strong> BakkesMod Framework</div>
+      <div class="download-count">📥 500.000+ Downloads</div>
+      <a href="https://bakkesplugins.com/plugins/view/108" target="_blank" class="download-btn rl-green">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="training">
+    <div class="card-header rl-blue">
+      <div class="category rl-blue">Training</div>
+      Workshop Maps
+    </div>
+    <div class="card-content">
+      <h3>Workshop Map Loader <span class="rating">⭐ 4.9</span></h3>
+      <p>Lade und spiele Workshop-Maps direkt im Spiel! Trainiere deine Skills mit hunderten von Community-erstellten Maps.</p>
+      <div class="features"><strong>Features:</strong> In-Game Download, Map-Browser, Favoriten, Auto-Updates</div>
+      <div class="requirements"><strong>Benötigt:</strong> BakkesMod, Steam Workshop</div>
+      <div class="download-count">📥 350.000+ Downloads</div>
+      <a href="https://bakkesplugins.com/plugins/view/223" target="_blank" class="download-btn rl-blue">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="gameplay">
+    <div class="card-header rl-teal">
+      <div class="category rl-teal">Gameplay</div>
+      Rank Display
+    </div>
+    <div class="card-content">
+      <h3>IngameRank <span class="rating">⭐ 4.7</span></h3>
+      <p>Zeige deinen aktuellen Rank und MMR direkt im Spiel an. Verfolge deinen Progress in Echtzeit!</p>
+      <div class="features"><strong>Features:</strong> Live MMR, Rank-Tracking, Progress-Anzeige, History</div>
+      <div class="requirements"><strong>Benötigt:</strong> BakkesMod Framework</div>
+      <div class="download-count">📥 280.000+ Downloads</div>
+      <a href="https://bakkesplugins.com/plugins/view/282" target="_blank" class="download-btn rl-teal">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="social">
+    <div class="card-header rl-emerald">
+      <div class="category rl-emerald">Social</div>
+      Platform Icons
+    </div>
+    <div class="card-content">
+      <h3>PlatformDisplay <span class="rating">⭐ 4.6</span></h3>
+      <p>Zeigt die Gaming-Plattform deiner Mitspieler an. Erkenne sofort, wer auf welcher Konsole oder PC spielt!</p>
+      <div class="features"><strong>Features:</strong> Steam, Epic, Xbox, PlayStation, Nintendo Switch Icons</div>
+      <div class="requirements"><strong>Benötigt:</strong> BakkesMod Framework</div>
+      <div class="download-count">📥 220.000+ Downloads</div>
+      <a href="https://bakkesplugins.com/plugins/view/376" target="_blank" class="download-btn rl-emerald">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="visual">
+    <div class="card-header rl-cyan">
+      <div class="category rl-cyan">Visual</div>
+      Profile Avatars
+    </div>
+    <div class="card-content">
+      <h3>RLProfilePictures <span class="rating">⭐ 4.5</span></h3>
+      <p>Zeige Steam-Profilbilder aller Spieler im Spiel an. Personalisiere dein Rocket League Erlebnis!</p>
+      <div class="features"><strong>Features:</strong> Steam Avatar Display, In-Game Integration, Auto-Update</div>
+      <div class="requirements"><strong>Benötigt:</strong> BakkesMod, Steam-Account</div>
+      <div class="download-count">📥 180.000+ Downloads</div>
+      <a href="https://bakkesplugins.com/plugins/view/475" target="_blank" class="download-btn rl-cyan">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="utility">
+    <div class="card-header rl-indigo">
+      <div class="category rl-indigo">Utility</div>
+      BakkesMod Framework
+    </div>
+    <div class="card-content">
+      <h3>BakkesMod Framework <span class="rating">⭐ 5.0</span></h3>
+      <p>Das Essential-Framework für alle Rocket League Mods! Ohne BakkesMod funktionieren die meisten Plugins nicht.</p>
+      <div class="features"><strong>Features:</strong> Plugin-System, Developer-Tools, Performance-Monitoring</div>
+      <div class="requirements"><strong>Hinweis:</strong> Grundlage für fast alle RL-Mods</div>
+      <div class="download-count">📥 2.000.000+ Downloads</div>
+      <a href="https://bakkesmod.com/" target="_blank" class="download-btn rl-indigo">Download</a>
+    </div>
+  </div>
+
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const modCards = document.querySelectorAll('.mod-card');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    
+    // Suche
+    searchBox.addEventListener('input', function() {
+      const term = this.value.toLowerCase();
+      modCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.classList.toggle('hidden', !text.includes(term));
+      });
+    });
+    
+    // Filter
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filter = this.dataset.filter;
+        modCards.forEach(card => {
+          const shouldShow = filter === 'all' || card.dataset.category === filter;
+          card.classList.toggle('hidden', !shouldShow);
+        });
+        
+        searchBox.value = '';
+      });
+    });
+  </script>
+</body>
+</html>

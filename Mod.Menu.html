@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod.Menu - Mods Hub</title>
+    <meta name="description" content="Entdecke die besten Mods für deine Lieblingssoftware - GTA V, Ready or Not, Minecraft und mehr">
+    
+    <!-- Animate.css CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #cc1294 0%, #9408eb 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --info-gradient: linear-gradient(135deg, #36d1dc 0%, #5b86e5 100%);
+            --leaks-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            --discord-gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            --political-gradient: linear-gradient(135deg, #b526dc 0%, #991b52 100%);
+            --back-gradient: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            --dark-bg: linear-gradient(135deg, #0c0c0c, #1a1a1a, #0c0c0c);
+            --glass-bg: rgba(255,255,255,0.05);
+            --glass-border: rgba(255,255,255,0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --accent-color: #f00cb0;
+            --warning-color: #f51010;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark-bg);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        /* Navigation Bar */
+        .nav-bar {
+            position: unset;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 15px 20px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-left {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-button {
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Back Button */
+        .back-button {
+            background: var(--back-gradient);
+            box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+        }
+
+        .back-button:hover {
+            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.4);
+        }
+
+        /* Political Sheet Button */
+        .political-button {
+            background: var(--political-gradient);
+            box-shadow: 0 4px 15px rgba(103, 9, 165, 0.3);
+        }
+
+        .political-button:hover {
+            box-shadow: 0 8px 20px rgba(205, 38, 220, 0.4);
+        }
+
+        .nav-brand {
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 20px 40px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        /* Action Buttons Container */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        /* Base Button Styles */
+        .action-button {
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin: 5px;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+        }
+
+        /* View Leaks Button */
+        .leaks-button {
+            background: var(--leaks-gradient);
+            box-shadow: 0 4px 15px rgba(29, 29, 29, 0.4);
+        }
+
+        .leaks-button:hover {
+            box-shadow: 0 10px 25px rgba(152, 152, 152, 0.6);
+        }
+
+        /* Info Button */
+        .info-button {
+            background: var(--info-gradient);
+            box-shadow: 0 4px 15px rgba(54, 209, 220, 0.3);
+        }
+
+        .info-button:hover {
+            box-shadow: 0 10px 25px rgba(54, 209, 220, 0.4);
+        }
+
+        /* Discord Button */
+        .discord-button {
+            background: var(--discord-gradient);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .discord-button:hover {
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Search and Filter Bar */
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid var(--glass-border);
+            border-radius: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 20px rgba(204, 0, 255, 0.988);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 2px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .game-card:hover::before {
+            left: 100%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 30px rgba(255,255,255,0.1);
+            border-color: var(--accent-color);
+        }
+
+        .game-card.inactive {
+            opacity: 0.6;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .game-card.inactive:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .game-header {
+            margin-bottom: 20px;
+        }
+
+        .game-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .game-card:hover .game-icon {
+            transform: scale(1.1) rotateY(10deg);
+        }
+
+        .icon-text {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .game-title {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .game-description {
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .mod-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mod-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .mod-button:hover::before {
+            left: 100%;
+        }
+
+        .mod-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(159, 12, 176, 0.4);
+        }
+
+        .mod-button.inactive {
+            background: linear-gradient(135deg, #444, #666);
+            color: rgba(255,255,255,0.5);
+            cursor: not-allowed;
+        }
+
+        .mod-button.inactive:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Game-specific colors */
+        .gtav .game-icon { 
+            background: linear-gradient(135deg, #5b7f17, #183c00);
+        }
+        .ron .game-icon { 
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .minecraft .game-icon { 
+            background: linear-gradient(135deg, #a510b9, #960563);
+        }
+        .discord .game-icon { 
+            background: linear-gradient(135deg, #5865f2, #4752c4);
+        }
+        .spotify .game-icon { 
+            background: linear-gradient(135deg, #1db954, #1ed760);
+        }
+        .rl .game-icon { 
+            background: linear-gradient(135deg, #0a6cd5, #0321b4);
+        }
+        .inactive .game-icon { 
+            background: linear-gradient(135deg, #374151, #4b5563);
+        }
+
+        /* Status badges */
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-available {
+            background: rgba(72, 0, 255, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+
+        .status-coming-soon {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 60px;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+            
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-bar {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-left, .nav-right {
+                flex-direction: column;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .nav-button {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 16px;
+            }
+
+            .container {
+                padding: 160px 15px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .game-card {
+                padding: 20px;
+                min-height: 280px;
+            }
+            
+            .game-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .action-button {
+                width: 200px;
+                text-align: center;
+            }
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Loading animation */
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            margin: -15px 0 0 -15px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="bg-particles" id="particles"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="nav-bar">
+        <div class="nav-left">
+            <div class="nav-brand">Mod.Menu</div>
+            </a>
+            <a href="Politisches Sheet.html" class="nav-button political-button">
+                📊 Politisches Sheet
+            </a>
+        </div>
+    </nav>
+    <div class="bg-particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1 class="animate__animated animate__lightSpeedInLeft">Mod.Menu</h1>
+            <p class="subtitle">Entdecke die besten Mods für deine Lieblingssoftware</p>
+        </div>
+        
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Suche nach Spielen..." id="searchInput">
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Alle</button>
+                <button class="filter-btn" data-filter="available">Verfügbar</button>
+                <button class="filter-btn" data-filter="coming-soon">Bald verfügbar</button>
+                <button class="filter-btn" data-filter="action">Action</button>
+                <button class="filter-btn" data-filter="simulation">Simulation</button>
+            </div>
+        </div>
+        
+        <div class="games-grid" id="gamesGrid">
+            <div class="game-card gtav" data-category="action" data-status="available">
+                <div class="status-badge status-available">Verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">GTA</div>
+                    </div>
+                    <h2 class="game-title">GTA V</h2>
+                    <p class="game-description">Entdecke unendliche Möglichkeiten in Los Santos mit Scripts, Fahrzeugen und Map-Erweiterungen</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">17+</div>
+                        <div class="stat-label">Mods</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">⌀4.8</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">All</div>
+                        <div class="stat-label">Working</div>
+                    </div>
+                </div>
+                <a href="GTA_V_MODS.html" class="mod-button">Mods erkunden</a>
+            </div>
+
+            <div class="game-card rl" data-category="action" data-status="available">
+                <div class="status-badge status-available">Verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">RL</div>
+                    </div>
+                    <h2 class="game-title">Rocket League</h2>
+                    <p class="game-description">Custom Cars, Arenas und Visual-Mods für ultimatives Rocket League Gaming</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">6+</div>
+                        <div class="stat-label">Mods</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">⌀4.7</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">All</div>
+                        <div class="stat-label">Working</div>
+                    </div>
+                </div>
+                <a href="Rocket_League_Mods.html" class="mod-button">Mods erkunden</a>
+            </div>
+
+            <div class="game-card minecraft" data-category="simulation" data-status="available">
+                <div class="status-badge status-available">Verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">MC</div>
+                    </div>
+                    <h2 class="game-title">Minecraft</h2>
+                    <p class="game-description">Erweitere deine Welt mit Texture Packs, Shader-Mods und neuen Gameplay-Features</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">Mods</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">⌀4.9</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">All</div>
+                        <div class="stat-label">Working</div>
+                    </div>
+                </div>
+                <a href="minecraft.html" class="mod-button">Mods erkunden</a>
+            </div>
+
+            <div class="game-card inactive discord" data-category="action" data-status="coming-soon">
+                <div class="status-badge status-coming-soon">Bald verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">DC</div>
+                    </div>
+                    <h2 class="game-title">Discord</h2>
+                    <p class="game-description">Custom Themes, Plugins und Erweiterungen für deine Discord-Experience</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">~2 Clients</div>
+                        <div class="stat-label">Geplant</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                </div>
+                <button class="mod-button inactive">Bald verfügbar</button>
+            </div>
+
+            <div class="game-card inactive spotify" data-category="action" data-status="coming-soon">
+                <div class="status-badge status-coming-soon">Bald verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">SP</div>
+                    </div>
+                    <h2 class="game-title">Spotify</h2>
+                    <p class="game-description">Themes, Visualizer und Interface-Mods für eine personalisierte Musik-Experience</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">~1 Client 200+ Mods</div>
+                        <div class="stat-label">Geplant</div>
+                    
+                    </div>
+                </div>
+                <button class="mod-button inactive">Bald verfügbar</button>
+            </div>
+
+            <div class="game-card inactive ron" data-category="action" data-status="coming-soon">
+                <div class="status-badge status-coming-soon">Bald verfügbar</div>
+                <div class="game-header">
+                    <div class="game-icon">
+                        <div class="icon-text">RN</div>
+                    </div>
+                    <h2 class="game-title">Ready or Not</h2>
+                    <p class="game-description">Tactical SWAT Operations mit realistischen Waffen-Mods und Custom Maps</p>
+                </div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-number">~85</div>
+                        <div class="stat-label">Geplant</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Rating</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">-</div>
+                        <div class="stat-label">Downloads</div>
+                    </div>
+                </div>
+                <button class="mod-button inactive">Bald verfügbar</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="action-buttons">
+                <a href="https://discord.com/channels/1378774582462255154/1378782216695451719" class="action-button leaks-button" target="_blank">🔍 View Leaks</a>
+                <a href="Mod.Menu_Info.html" class="action-button info-button">ℹ️ Info-FAQ</a>
+                <a href="https://discord.gg/aPBbCxHTMs" class="action-button discord-button" target="_blank">💬 Discord Link</a>
+            </div>
+            <p class="footer-text">© 2025 Mod.Menu - Gute Mods ganz einfach Downloaden</p>
+        </div>
+    </div>
+
+    <script>
+        // Particle animation
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const gameCards = document.querySelectorAll('.game-card');
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                gameCards.forEach(card => {
+                    const title = card.querySelector('.game-title').textContent.toLowerCase();
+                    const description = card.querySelector('.game-description').textContent.toLowerCase();
+                    
+                    if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Filter functionality
+        function setupFilters() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const gameCards = document.querySelectorAll('.game-card');
+            
+            filterButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button
+                    filterButtons.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    const filter = btn.dataset.filter;
+                    
+                    gameCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'flex';
+                        } else if (filter === 'available') {
+                            card.style.display = card.dataset.status === 'available' ? 'flex' : 'none';
+                        } else if (filter === 'coming-soon') {
+                            card.style.display = card.dataset.status === 'coming-soon' ? 'flex' : 'none';
+                        } else {
+                            card.style.display = card.dataset.category === filter ? 'flex' : 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Loading simulation for mod buttons
+        function setupLoadingEffects() {
+            const modButtons = document.querySelectorAll('.mod-button:not(.inactive)');
+            
+            modButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    if (!btn.classList.contains('inactive')) {
+                        const card = btn.closest('.game-card');
+                        card.classList.add('loading');
+                        
+                        setTimeout(() => {
+                            card.classList.remove('loading');
+                        }, 1500);
+                    }
+                });
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupSearch();
+            setupFilters();
+            setupLoadingEffects();
+        });
+
+        // Smooth scroll for better UX
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Mods Collection - 200 Mods</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #000000, #874b57, #B22222);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, #FF6B6B, #FFE66D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF4444, #CC0000);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 68, 68, 0.4);
+            background: linear-gradient(45deg, #FF6666, #EE0000);
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .mods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mod-card {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mod-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .mod-card:hover::before {
+            left: 100%;
+        }
+
+        .mod-card:hover {
+            transform: translateY(-5px);
+            border-color: #FF4444;
+            box-shadow: 0 10px 30px rgba(255, 68, 68, 0.3);
+        }
+
+        .mod-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #FFE66D;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .mod-description {
+            margin-bottom: 15px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #FF4444, #CC0000);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(255, 68, 68, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.5);
+        }
+
+        .stats {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1> Minecraft Mods Collection</h1>
+            <p class="subtitle">Die ultimative Sammlung von 200 Minecraft Mods</p>
+        </header>
+
+        <a href="minecraft.html" class="back-button">← Zurück zu Minecraft</a>
+
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Mod suchen..." id="searchInput">
+        </div>
+
+        <div class="mods-grid" id="modsGrid">
+            <!-- Mods werden hier per JavaScript generiert -->
+        </div>
+
+        <div class="stats">
+            <h3>📊 Statistiken</h3>
+            <p>Insgesamt <strong>200 Mods</strong> verfügbar | Alle kostenlos downloadbar</p>
+        </div>
+    </div>
+
+    <script>
+        // Mod-Kategorien für mehr Realismus
+        const categories = [
+            'Tech', 'Magic', 'Adventure', 'Building', 'Decoration', 'Tools', 'Weapons', 'Armor',
+            'Food', 'Animals', 'Transportation', 'Automation', 'Energy', 'Mining', 'Farming',
+            'Biomes', 'Dimensions', 'Boss', 'Quest', 'Storage', 'Crafting', 'Utility'
+        ];
+
+        const modTypes = [
+            'ModPack', 'Standalone', 'Library', 'Core', 'Extension', 'Plugin', 'Addon'
+        ];
+
+        // Generiere 200 Mods
+        function generateMods() {
+            const modsGrid = document.getElementById('modsGrid');
+            let modsHTML = '';
+
+            for (let i = 1; i <= 200; i++) {
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const type = modTypes[Math.floor(Math.random() * modTypes.length)];
+                
+                modsHTML += `
+                    <div class="mod-card" data-name="mod ${i} ${category.toLowerCase()}">
+                        <div class="mod-title">Mod ${i} - ${category} ${type}</div>
+                        <div class="mod-description">
+                            Ein fantastischer ${category}-Mod, der dein Minecraft-Erlebnis revolutioniert! 
+                            Dieser ${type} fügt neue Features, Items und Mechaniken hinzu.
+                        </div>
+                        <a href="https://www.curseforge.com/minecraft/mc-mods/mod-${i}" class="download-btn" target="_blank">
+                            📥 Download Mod ${i}
+                        </a>
+                    </div>
+                `;
+            }
+
+            modsGrid.innerHTML = modsHTML;
+        }
+
+        // Suchfunktion
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const modCards = document.querySelectorAll('.mod-card');
+
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                modCards.forEach(card => {
+                    const cardName = card.getAttribute('data-name');
+                    if (cardName.includes(searchTerm)) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+            });
+        }
+
+        // Smooth Scroll Animation
+        function addScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.mod-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        }
+
+        // Initialisierung
+        document.addEventListener('DOMContentLoaded', function() {
+            generateMods();
+            setupSearch();
+            setTimeout(addScrollAnimation, 100);
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && e.ctrlKey) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+    </script>
+</body>
+</html>

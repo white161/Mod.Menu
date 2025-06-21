@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA V Mods Übersicht</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #607300 100%);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: linear-gradient(45deg, #ff4c4c, #ff6b6b);
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      z-index: 1000;
+      transition: transform 0.2s ease;
+    }
+    
+    .back-btn:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      margin: 60px 0 30px 0;
+      text-align: center;
+      border-bottom: 2px solid #fff;
+      padding-bottom: 10px;
+      animation: glow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor, 0 0 20px currentColor; }
+      50% { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor; }
+    }
+
+    .bulk-download-container {
+      text-align: center;
+      margin: 30px 0 40px 0;
+      padding: 25px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 20px;
+      border: 2px solid rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bulk-download-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(transparent, rgba(255,215,0,0.3), transparent);
+      animation: rotate 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .bulk-download-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .bulk-download-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #ffd500;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
+    }
+
+    .bulk-download-desc {
+      color: #ddd;
+      margin-bottom: 20px;
+      font-size: 1.1rem;
+    }
+
+    .bulk-download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px 35px;
+      background: linear-gradient(45deg, #ffd500, #ffed4e, #ffd500);
+      background-size: 200% 100%;
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(255,215,0,0.3);
+    }
+
+    .bulk-download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .bulk-download-btn:hover {
+      transform: scale(1.05) translateY(-3px);
+      background-position: 100% 0;
+      box-shadow: 0 12px 40px rgba(255,215,0,0.4);
+    }
+
+    .bulk-download-btn:hover::before {
+      left: 100%;
+    }
+
+    .bulk-download-btn .icon {
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
+      60% { transform: translateY(-3px); }
+    }
+
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto 30px auto;
+      display: block;
+      padding: 12px 20px;
+      border: 2px solid #333;
+      border-radius: 25px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    
+    .search-box:focus { border-color: #fff; }
+    .search-box::placeholder { color: #999; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .filter-btn {
+      padding: 8px 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+    
+    .filter-btn:hover, .filter-btn.active {
+      background: rgba(255,255,255,0.2);
+      border-color: #fff;
+    }
+
+    .mod-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 15px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: transform 0.2s ease;
+      overflow: hidden;
+    }
+    
+    .mod-card:hover { transform: translateY(-2px); }
+    .mod-card.hidden { display: none; }
+
+    .card-header {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      /* Für eigene Bilder verwenden Sie: */
+      /* background-image: url('pfad/zu/ihrem/bild.jpg'); */
+    }
+
+    .card-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+
+    .card-header > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .category {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 3;
+    }
+
+    h3 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin: 0 0 10px 0;
+      animation: glow 2.5s infinite ease-in-out;
+    }
+
+    p {
+      margin-bottom: 15px;
+      color: #ddd;
+    }
+
+    .requirements {
+      font-size: 0.9rem;
+      color: #bbb;
+      background: rgba(255,255,255,0.05);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border-left: 3px solid #ffd500;
+      margin: 15px 0;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 25px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 700;
+      color: white;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .download-btn:hover::before { left: 100%; }
+    .download-btn:hover { transform: scale(1.05) translateY(-2px); }
+    .download-btn::after { content: "↓"; font-size: 1.3rem; }
+
+    .vehicle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .vehicle-item {
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .vehicle-item:hover { transform: translateY(-2px); }
+
+    .vehicle-header {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: white;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      /* Für eigene Bilder verwenden Sie: */
+      /* background-image: url('pfad/zu/ihrem/bild.jpg'); */
+    }
+
+    .vehicle-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+
+    .vehicle-header > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .vehicle-content {
+      padding: 15px;
+    }
+
+    .vehicle-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 10px;
+      transition: opacity 0.2s ease;
+    }
+
+    .vehicle-link:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    /* Colors */
+    .color-1 { background: linear-gradient(45deg, #ff4c4c, #ff6b6b); }
+    .color-2 { background: linear-gradient(45deg, #ff8c00, #ffa500); }
+    .color-3 { background: linear-gradient(45deg, #ffd500, #ffed4e); }
+    .color-4 { background: linear-gradient(45deg, #32cd32, #50e050); }
+    .color-5 { background: linear-gradient(45deg, #1e90ff, #4dabf7); }
+    .color-6 { background: linear-gradient(45deg, #4b0082, #7c3aed); }
+    .color-7 { background: linear-gradient(45deg, #9400d3, #c084fc); }
+    .color-8 { background: linear-gradient(45deg, #03fcb6, #00d4aa); }
+    .color-9 { background: linear-gradient(45deg, #e91e63, #f48fb1); }
+
+    @media (max-width: 768px) {
+      body { padding: 15px; }
+      .vehicle-grid { grid-template-columns: 1fr; }
+      .bulk-download-btn {
+        font-size: 1rem;
+        padding: 12px 25px;
+      }
+      .bulk-download-title {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="Mod.Menu.html" class="back-btn">← Zurück zum Mod Menu</a>
+
+  <h1>GTA V Mods Übersicht</h1>
+
+  <!-- Bulk Download Section -->
+  <div class="bulk-download-container">
+    <div class="bulk-download-content">
+      <div class="bulk-download-title">Alle Mods auf einmal!</div>
+      <div class="bulk-download-desc">Lade alle Mods in einer praktischen RAR-Datei herunter</div>
+      <a href="GTA_V_RAR.html" class="bulk-download-btn">
+        <span class="icon">📦</span>
+        All Downloads at Once
+      </a>
+    </div>
+  </div>
+
+  <input type="text" class="search-box" placeholder="Nach Mods suchen..." id="searchBox">
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">Alle</button>
+    <button class="filter-btn" data-filter="script">Scripts</button>
+    <button class="filter-btn" data-filter="vehicle">Fahrzeuge</button>
+    <button class="filter-btn" data-filter="clothing">Kleidung</button>
+    <button class="filter-btn" data-filter="map">Maps</button>
+    <button class="filter-btn" data-filter="tool">Tools</button>
+  </div>
+
+  <div class="mod-card" data-category="script">
+    <div class="card-header color-1" style="background-image: url('Pictures/Quick\ Mask\ Beta.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ff4c4c, #ff8c00);">Script</div>
+      Quick Mask Preview
+    </div>
+    <div class="card-content">
+      <h3>Quick Mask BETA</h3>
+      <p>Toggle mask/hat with keybind. Works with story companions.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V</div>
+      <a href="https://www.gta5-mods.com/scripts/quick-mask-beta#comments_tab" target="_blank" class="download-btn color-1">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="script">
+    <div class="card-header color-2" style="background-image: url('Pictures/Vinewood\ Cub\ Garage.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ff4c4c, #ff8c00);">Script</div>
+      Vinewood Club Garage
+    </div>
+    <div class="card-content">
+      <h3>Vinewood Club Garage</h3>
+      <p>GTA Online garage in Single Player. Manage 100 vehicles across 5 floors.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V</div>
+      <a href="https://www.gta5-mods.com/scripts/vinewood-club-garage-hkh191" target="_blank" class="download-btn color-2">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="vehicle">
+    <div class="card-header color-3" style="background-image: url('Pictures/Liberty\ Walk.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #32cd32, #ffd500);">Fahrzeuge</div>
+      Liberty Walk Collection
+    </div>
+    <div class="card-content">
+      <h3>Liberty Walk Fahrzeuge</h3>
+      <p>Spektakuläre Widebody-Kits von Liberty Walk. 9 Premium Fahrzeuge:</p>
+      
+      <div class="vehicle-grid">
+        <div class="vehicle-item">
+          <div class="vehicle-header color-4" style="background-image: url('Pictures/Lamborghini\ Huracan\ Spyder.png');background-size: cover;">Lamborghini Huracan</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/huracan-spyder-veneno-roadster-add_on-se7enmoon" target="_blank" class="vehicle-link" style="color: #32cd32;">Lamborghini Huracan LP610-4 Spyder Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-5" style="background-image: url('Pictures/Lamborghini\ Huracan\ LP-610.png');background-size: cover;">Lamborghini LP610</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/lamborghini-lp-610-liberty-walk" target="_blank" class="vehicle-link" style="color: #1e90ff;">Lamborghini LP-610 Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-6" style="background-image: url('Pictures/2013\ Lamborghini\ Aventador.png');background-size: cover;">Lamborghini Aventador</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2016-lamborghini-aventador-lp750-4-superveioce-roadster-se7enmoon" target="_blank" class="vehicle-link" style="color: #4b0082;">Lamborghini Aventador Roadster Liberty</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-7" style="background-image: url('Pictures/2017\ Nissan\ GTR.png');background-size: cover;">Nissan GT-R</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2015-nissan-gtr-nismo-yca-y97y/download/31526" target="_blank" class="vehicle-link" style="color: #9400d3;">2017 Nissan GT-R (R35) Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-1" style="background-image: url('Pictures/2018\ Dodge\ Challenger.png');background-size: cover;">Dodge Challenger</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2018-dodge-challenger-srt-demon-libertywalk-add-on" target="_blank" class="vehicle-link" style="color: #ff4c4c;">Dodge Challenger SRT Demon Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-2" style="background-image: url('Pictures/BMW\ E3.png');background-size: cover;">BMW M3</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/bmw-m3-e92-liberty-walk-2010" target="_blank" class="vehicle-link" style="color: #ff8c00;">BMW M3 (E92) Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-8" style="background-image: url('Pictures/2016\ Mclaren\ Spider.png');background-size: cover;">McLaren 675LT</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2016-mclaren-675lt-spider-automatic-convertible" target="_blank" class="vehicle-link" style="color: #03fcb6;">McLaren 675LT Spider Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-9" style="background-image: url('Pictures/2016\ Honda\ NSX.png');background-size: cover;">Honda NSX</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2016-honda-nsx-nc1" target="_blank" class="vehicle-link" style="color: #e91e63;">Honda NSX (NC1) Liberty Walk</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+        
+        <div class="vehicle-item">
+          <div class="vehicle-header color-4" style="background-image: url('Pictures/2014\ BMW\ M4.png');background-size: cover;">BMW M4</div>
+          <div class="vehicle-content">
+            <a href="https://www.gta5-mods.com/vehicles/2014-bmw-m4-liberty-walk" target="_blank" class="vehicle-link" style="color: #32cd32;">LB-WORKS BMW 4series</a>
+            <div class="requirements">Add-On Loader, Script Hook V</div>
+          </div>
+        </div>
+      </div>
+      
+      <a href="https://yca-mods.weebly.com/cars.html" class="download-btn color-3">Mehr Cars</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="map">
+    <div class="card-header color-4" style="background-image: url('Pictures/Luxury\ Garage.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #1e90ff, #9400d3);">Map</div>
+      Luxury Garage
+    </div>
+    <div class="card-content">
+      <h3>New Luxury Garage Location SPG</h3>
+      <p>Luxuriöse Garagenlocation mit besonderem Design.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V empfohlen</div>
+      <a href="https://www.gta5-mods.com/maps/new-luxury-garage-location-spg" target="_blank" class="download-btn color-4">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="script">
+    <div class="card-header color-5" style="background-image: url('Pictures/Money.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ff4c4c, #ff8c00);">Script</div>
+      Money Stack
+    </div>
+    <div class="card-content">
+      <h3>Maximum Amount of Money</h3>
+      <p>Erhöht das maximale Geld, das der Spieler besitzen kann.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V</div>
+      <a href="https://www.gta5-mods.com/scripts/maximum-ammount-of-money" target="_blank" class="download-btn color-5">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="clothing">
+    <div class="card-header color-6" style="background-image: url('Pictures/Shoes.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ff8c00, #4b0082);">Kleidung</div>
+      Sneaker Collection
+    </div>
+    <div class="card-content">
+      <h3>Ultimate Shoes Pack for Franklin</h3>
+      <p>Ergänzt Franklins Schuh-Kollektion mit vielen neuen Schuhen.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V, DLC Add-On Loader</div>
+      <a href="https://www.gta5-mods.com/player/ultimate-shoes-pack-for-franklin-add-on" target="_blank" class="download-btn color-6">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="tool">
+    <div class="card-header color-7" style="background-image: url('Pictures/ScriptHookV.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ffd500, #32cd32);">Tool</div>
+      Programming Code
+    </div>
+    <div class="card-content">
+      <h3>Script Hook V</h3>
+      <p>Essenzielles Tool für Modder, um Skripte und Mods in GTA V zu laden.</p>
+      <div class="requirements"><strong>Hinweis:</strong> Grundlage für viele Mods</div>
+      <a href="https://www.gta5-mods.com/tools/script-hook-v" target="_blank" class="download-btn color-7">Download</a>
+    </div>
+  </div>
+
+  <div class="mod-card" data-category="clothing">
+    <div class="card-header color-8" style="background-image: url('Pictures/BaggyJeans.png');background-size: cover;">
+      <div class="category" style="background: linear-gradient(45deg, #ff8c00, #4b0082);">Kleidung</div>
+      Baggy Jeans Fashion
+    </div>
+    <div class="card-content">
+      <h3>Better Baggy Jeans</h3>
+      <p>Mod für bessere und coolere Baggy Jeans Outfits.</p>
+      <div class="requirements"><strong>Benötigt:</strong> Script Hook V empfohlen</div>
+      <a href="https://de.gta5-mods.com/player/better-baggy-jeans#description_tab" target="_blank" class="download-btn color-8">Download</a>
+    </div>
+  </div>
+
+  <script>
+    const searchBox = document.getElementById('searchBox');
+    const modCards = document.querySelectorAll('.mod-card');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    
+    // Search
+    searchBox.addEventListener('input', function() {
+      const term = this.value.toLowerCase();
+      modCards.forEach(card => {
+        const title = card.querySelector('h3').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+        card.classList.toggle('hidden', !title.includes(term) && !desc.includes(term));
+      });
+    });
+    
+    // Filter
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        const filter = this.dataset.filter;
+        modCards.forEach(card => {
+          card.classList.toggle('hidden', filter !== 'all' && card.dataset.category !== filter);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

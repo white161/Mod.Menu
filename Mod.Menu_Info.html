@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mod.Menu - Häufig gestellte Fragen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #9b59b6 0%, #2c3e50 50%, #000000 100%);
+            min-height: 100vh;
+            color: white;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(155, 89, 182, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .back-button {
+            background: linear-gradient(45deg, #9b59b6, #2c3e50);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6);
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5em;
+            margin-top: 60px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        .faq-section {
+            background: rgba(155, 89, 182, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .faq-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(155, 89, 182, 0.5);
+        }
+
+        .section-title {
+            background: linear-gradient(45deg, #9b59b6, #2c3e50);
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .section-title:hover {
+            background: linear-gradient(45deg, #8e44ad, #34495e);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 2px;
+        }
+
+        .section-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .question-list {
+            padding: 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+        }
+
+        .question-list.active {
+            max-height: 2000px;
+        }
+
+        .question-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: rgba(155, 89, 182, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            background: rgba(155, 89, 182, 0.2);
+            border-color: rgba(155, 89, 182, 0.4);
+        }
+
+        .question {
+            background: transparent;
+            padding: 18px 24px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: white;
+            font-size: 1.1em;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .question-text::before {
+            content: '❓';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .question-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+
+        .answer {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: rgba(44, 62, 80, 0.3);
+            border-top: 1px solid rgba(155, 89, 182, 0.2);
+        }
+
+        .answer.active {
+            max-height: 300px;
+            padding: 20px 24px;
+        }
+
+        .answer-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .intro-text {
+            background: rgba(155, 89, 182, 0.2);
+            border: 1px solid rgba(155, 89, 182, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.1em;
+            color: white;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .highlight {
+            background: linear-gradient(45deg, #9b59b6, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-top: 80px;
+            }
+
+            .back-button {
+                position: static;
+                margin-bottom: 20px;
+                display: block;
+                text-align: center;
+                width: fit-content;
+            }
+
+            .question {
+                padding: 15px 20px;
+            }
+
+            .section-title {
+                font-size: 1.2em;
+                padding: 15px;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="Mod.Menu.html" class="back-button">← Zurück zu Mod.Menu</a>
+            <h1>Mod.Menu FAQ</h1>
+            <p class="subtitle">Häufig gestellte Fragen & Antworten</p>
+        </div>
+
+        <div class="intro-text">
+            Hier findest du alle wichtigen Fragen rund um das <span class="highlight">Mod.Menu</span> - 
+            deinem zentralen Hub für Gaming-Modifications!
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                🎮 Was ist Mod.Menu?
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Was genau ist Mod.Menu und wie funktioniert es?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Mod.Menu ist ein Hub-System mit auswählbaren Spielen und deren Mods, die dein Spiel modifizieren können. Es besteht aus einem Ordner mit HTML-Seiten, wo du Links zu Downloads finden kannst.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Ist Mod.Menu ein Mod-Repository oder nur ein Hub?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Mod.Menu ist nur ein Hub, wo du Mods zu Spielen finden kannst. Es sind vorgeschlagene Mods vom Entwickler der Seite.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Woher kommen die Mods, die hier gezeigt werden?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Die Mods sind im Internet zu finden, alle auf anderen Portalen, aber bekannten und vertrauenswürdigen Quellen.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                ⬇️ Download-Optionen
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Wie kann ich einzelne Mods herunterladen?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Um eine Mod zu downloaden, einfach den Link der Mod anklicken und den Schritten des Entwicklers der Mod folgen.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Was ist der Unterschied zwischen "beim Entwickler downloaden" und "RAR-Download"?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Der Unterschied liegt darin, dass in der RAR-Datei alle Mods enthalten sind, die vorgestellt werden (siehe Rocket League). Beim Entwickler Downloaden ist nur die angezeigte Mod als Download verfügbar.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Sind alle Mods auch als Gesamt-RAR verfügbar?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Es sind alle vorgeschlagenen Mods des Spieles verfügbar. Für genaueres siehe Beschreibung der RAR-Datei.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Welche Vorteile hat der RAR-Download gegenüber einzelnen Downloads?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Es ist eine schnelle und gleich sichere Option des Downloads. So müssen keine großen Mengen an Downloads separat passieren - eine große RAR-Datei und der Spaß kann beginnen!</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Wie groß sind die RAR-Archive typischerweise?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Wie groß die RAR-Archive sind, kann man nicht pauschal sagen - es ist jedes Mal individuell. Es wird eine maximale Grenze von 5GB angestrebt.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                🔗 Links & Quellen
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Führen die Links direkt zu den Original-Entwicklern?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Ja, die Links führen nur zu den originalen Entwicklern!</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Werden die Links regelmäßig auf Funktionsfähigkeit geprüft?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Die Links werden jede Woche auf Funktionsfähigkeit geprüft.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Was passiert, wenn ein Entwickler-Link nicht mehr funktioniert?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Einen kaputten Link bitte im Discord Server im Bereich "Kaputte Links" reporten.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Sind alle verlinkten Quellen vertrauenswürdig?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Es wird auf vertrauenswürdige Plattformen gesetzt!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                📦 RAR-Archive
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Enthalten die RAR-Archive alle verfügbaren Mods eines Spiels?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Die RAR-Archive enthalten alle angegebenen Mods, die in der Beschreibung stehen.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Sind die Mods in den RAR-Archiven auf dem neuesten Stand?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Die RAR-Archive werden nicht regelmäßig aktualisiert. Das Datum der letzten Veröffentlichung wird angegeben. Bei nicht funktionierenden Mods muss der Nutzer selber eine Lösung finden. Neue Versionen können jedoch im Discord Server gemeldet werden.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Wie oft werden die RAR-Archive aktualisiert?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Es wird versucht, dass die RAR-Archive nach spätestens 3 Monaten aktualisiert werden. Da der Entwickler alleine arbeitet,es wird um Verständnis gebeten.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Sind Installationsanleitungen in den RAR-Archiven enthalten?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Nein.Die Erklärungen muss man auf den Offiellen Seiten raussuchen .Die RAR-Archive müssen nur entpackt werden. Wie dies funktioniert, wird auf https://www.win-rar.com erklärt.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                📋 Mod-Übersichten
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Wie detailliert sind die Mod-Beschreibungen?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Die Mod-Beschreibungen liegen am Entwickler dieser Mod.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Werden Screenshots oder Videos der Mods gezeigt?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Videos/Screenshots siehe Mod-Link.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Kann ich sehen, welche Mods kompatibel miteinander sind?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Nein - dieses Feature wird aber bald eingeführt.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Gibt es Bewertungen oder Empfehlungen für die Mods?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Alle der gezeigten Mods sind empfohlen vom Entwickler von <b>Mod.Menu</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <div class="section-title" onclick="toggleSection(this)">
+                🔄 Updates & Wartung
+                <span class="section-toggle">▼</span>
+            </div>
+            <div class="question-list">
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Wie erfahre ich, wenn neue Mods hinzugefügt werden?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Neue Mods werden einfach auf der Seite hochgeladen. Sobald mehr als 10 neue Mods hochgeladen werden, wird dies im Discord verkündet mit der neuen Version der Website.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Werden veraltete oder defekte Mods entfernt?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Defekte Mods werden für's Erste als defekt markiert. Ist die Mod abgestellt und wird nie mehr zu dem Standpunkt des Beitrags funktionieren, wird die Mod heruntergenommen.</div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <button class="question" onclick="toggleAnswer(this)">
+                        <span class="question-text">Kann ich Mods vorschlagen, die aufgenommen werden sollen?</span>
+                        <span class="question-toggle">▼</span>
+                    </button>
+                    <div class="answer">
+                        <div class="answer-text">Es können Spiele wie Mods vorgeschlagen werden → Discord Server Mod.Menu → Spiel / Mod vorschlagen.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Diese FAQ hilft dir dabei, das Mod.Menu optimal zu nutzen!
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(element) {
+            const questionList = element.nextElementSibling;
+            const toggle = element.querySelector('.section-toggle');
+            
+            if (questionList.classList.contains('active')) {
+                questionList.classList.remove('active');
+                toggle.textContent = '▼';
+                questionList.style.padding = '0 30px';
+            } else {
+                questionList.classList.add('active');
+                toggle.textContent = '▲';
+                questionList.style.padding = '30px';
+            }
+        }
+
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const toggle = element.querySelector('.question-toggle');
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                toggle.textContent = '▼';
+            } else {
+                answer.classList.add('active');
+                toggle.textContent = '▲';
+            }
+        }
+
+        // Smooth animations
+        document.querySelectorAll('.question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Parallax scroll effect for background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            document.body.style.backgroundPosition = `center ${rate}px`;
+        });
+
+        // Loading animation
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.faq-section').forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

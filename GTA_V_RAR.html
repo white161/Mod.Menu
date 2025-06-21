@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px #ffd700; }
+            to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px #ffd700, 0 0 30px #ffd700; }
+        }
+
+        .description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .download-section {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid #ffd700;
+            margin-bottom: 2rem;
+        }
+
+        .download-btn {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #000;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(255, 215, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(145deg, #ffed4e, #ffd700);
+        }
+
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+        .download-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .info-text {
+            color: #ffd700;
+            font-weight: bold;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .features {
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 0.5rem 0;
+            color: #e0e0e0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .warning {
+            background: linear-gradient(145deg, #333, #222);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .last-updated {
+            margin-top: 1.5rem;
+            padding: 0.8rem;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            color: #ffd700;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .back-button-container {
+            margin-top: 1.5rem;
+        }
+
+        .back-btn {
+            background: linear-gradient(145deg, #333, #444);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(145deg, #ffd700, #ffed4e);
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .back-icon {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .download-btn {
+                padding: 0.8rem 2rem;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Download Center</h1>
+        
+        <div class="description">
+            Du erhältst alle 17 Downloads in einer RAR
+        </div>
+        
+        <div class="download-section">
+            <a href="#" class="download-btn" onclick="startDownload()">
+                <span class="download-icon">⬇</span>
+                Download
+            </a>
+            
+            <div class="info-text">
+                Komplettes Paket • 17 Dateien • RAR-Archiv
+            </div>
+        </div>
+        
+        <div class="features">
+            <h3 style="color: #ffd700; margin-bottom: 1rem;">Inhalt des Pakets:</h3>
+            <ul>
+                <li>17 hochwertige Downloads</li>
+                <li>Komprimiert in RAR-Format</li>
+                <li>Sofortiger Zugriff nach Download</li>
+                <li>Alle Dateien vollständig enthalten</li>
+            </ul>
+        </div>
+        
+        <div class="warning">
+            <strong>Hinweis:</strong> Der Download startet automatisch über Google Drive. Stelle sicher, dass Popup-Blocker deaktiviert sind.
+        </div>
+        
+        <div class="last-updated">
+            Zuletzt aktualisiert: 01.06.2025
+        </div>
+        
+        <div class="back-button-container">
+            <a href="GTA_V_Mods.html" class="back-btn">
+                <span class="back-icon">←</span>
+                Zurück
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function startDownload() {
+            // Hier würden Sie Ihren echten Google Drive Link einfügen
+            const googleDriveLink = "https://drive.google.com/file/d/IHRE_FILE_ID/view?usp=sharing";
+            
+            // Für Demo-Zwecke zeigen wir eine Nachricht
+            alert("Hier würde der Download über Google Drive starten.\n\nErsetzen Sie 'IHRE_FILE_ID' im Code durch die echte Google Drive File-ID.");
+            
+            // Uncomment die folgende Zeile und ersetzen Sie den Link für echten Download:
+            // window.open(googleDriveLink, '_blank');
+        }
+
+        // Animationseffekte
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(50px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.8s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

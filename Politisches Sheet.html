@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politisches Sheet - All You Need to Know</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #f5f5f7;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f5f5f7;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #007aff;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #1616a9 0%, #05ac88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            color: #a1a1a6;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #1616a9 0%, #05ac88 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Ideologies Grid */
+        .ideologies {
+            padding: 100px 0;
+            background: #000;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .ideologies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .ideology-card {
+            background: rgba(29, 29, 31, 0.8);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ideology-card:hover {
+            transform: translateY(-5px);
+            border-color:  #0aa780;
+            box-shadow: 0 20px 40px rgba(0, 122, 255, 0.2);
+        }
+
+        .ideology-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .ideology-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .anarchismus .ideology-icon { background: linear-gradient(135deg, #ff6b6b, #ff8e8e); }
+        .antifaschismus .ideology-icon { background: linear-gradient(135deg, #4ecdc4, #44b8b0); }
+        .extremismus .ideology-icon { background: linear-gradient(135deg, #ff9f43, #feca57); }
+        .faschismus .ideology-icon { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+        .islamismus .ideology-icon { background: linear-gradient(135deg, #00b894, #00cec9); }
+        .kommunismus .ideology-icon { background: linear-gradient(135deg, #e84393, #fd79a8); }
+
+        .ideology-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .ideology-description {
+            color: #a1a1a6;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .ideology-examples {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 3px solid #007aff;
+        }
+
+        .ideology-examples h4 {
+            color: #007aff;
+            font-size: 14px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pros, .cons {
+            margin-bottom: 15px;
+        }
+
+        .pros h4 {
+            color: #30d158;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cons h4 {
+            color: #ff6b6b;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pros h4:before {
+            content: "✓";
+            margin-right: 8px;
+        }
+
+        .cons h4:before {
+            content: "✗";
+            margin-right: 8px;
+        }
+
+        .pros ul, .cons ul {
+            list-style: none;
+            color: #a1a1a6;
+        }
+
+        .pros li, .cons li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .pros li:before {
+            content: "•";
+            color: #30d158;
+            position: absolute;
+            left: 0;
+        }
+
+        .cons li:before {
+            content: "•";
+            color: #ff6b6b;
+            position: absolute;
+            left: 0;
+        }
+
+        .legal-status {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1d1d1f;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #a1a1a6;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .ideologies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .ideology-card {
+                padding: 20px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .ideology-card {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <div class="logo">Politisches Sheet</div>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#ideologies">Ideologien</a></li>
+                    <li><a href="Mod.Menu.html">Mod.Menu</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Politisches Sheet</h1>
+            <p>All you need to know - Eine kurzfassende Übersicht über politische Ideologien</p>
+            <a href="Ideologien.html" class="cta-button">Weitere Entdecken</a>
+        </div>
+    </section>
+
+    <!-- Ideologies Section -->
+    <section id="ideologies" class="ideologies">
+        <div class="container">
+            <h2 class="section-title">Politische Ideologien</h2>
+            
+            <div class="ideologies-grid">
+                <!-- Anarchismus -->
+                <div class="ideology-card anarchismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon"><img src="discord (1).png" alt="Bildbeschreibung"></div>
+                        <h3 class="ideology-title">Anarchismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Anarchie ist eine Ideologie, bei der es keine Herrschaft, keinen Staat und keine Regierung gibt. Menschen leben frei, gleichberechtigt und selbstorganisiert, ohne Gesetze „von oben".
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Historische Beispiele</h4>
+                        <p>Spanien 1936–1939, Ukraine 1918–1921</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Vorteile</h4>
+                        <ul>
+                            <li>Freiheit: Jeder Mensch ist unabhängig und entscheidet selbst</li>
+                            <li>Gleichheit: Niemand herrscht über andere</li>
+                            <li>Gemeinschaft: Kooperation und Solidarität statt Zwang</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Nachteile</h4>
+                        <ul>
+                            <li>Unsicherheit: Schwierige Konfliktlösung ohne Polizei</li>
+                            <li>Unordnung: Chaos ohne zentrale Organisation</li>
+                            <li>Schutz fehlt: Schwächere könnten benachteiligt werden</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Antifaschismus -->
+                <div class="ideology-card antifaschismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon">AF</div>
+                        <h3 class="ideology-title">Antifaschismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Antifaschismus ist eine Lebenseinstellung, die sich gegen Faschismus, Diktatur und rassistische Unterdrückung stellt. Es geht darum, autoritäre und diskriminierende Ideologien aktiv zu bekämpfen.
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Historische Beispiele</h4>
+                        <p>Widerstand gegen Nazi-Deutschland 1933-1945, Nachkriegseuropa</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Vorteile</h4>
+                        <ul>
+                            <li>Schutz der Menschenrechte gegen Rassismus und Hass</li>
+                            <li>Verteidigung der Demokratie</li>
+                            <li>Solidarität mit Minderheiten und Ausgegrenzten</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Nachteile</h4>
+                        <ul>
+                            <li>Keine einheitliche Bewegung mit teils extremen Meinungen</li>
+                            <li>Konfliktpotenzial durch radikale Gruppen</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Extremismus -->
+                <div class="ideology-card extremismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon">E</div>
+                        <h3 class="ideology-title">Extremismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Extremismus bezeichnet politische oder religiöse Einstellungen, die sehr radikal sind und oft die demokratische Grundordnung ablehnen. Extremisten wollen meist starke Veränderungen mit harten Mitteln.
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Formen</h4>
+                        <p>Rechter, linker oder religiöser Extremismus</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Mögliche Aspekte</h4>
+                        <ul>
+                            <li>Können auf Missstände aufmerksam machen</li>
+                            <li>Fördern oft Engagement und starke Überzeugungen</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Nachteile</h4>
+                        <ul>
+                            <li>Ablehnung demokratischer Werte</li>
+                            <li>Oft Gewalt und Intoleranz</li>
+                            <li>Gefährdung von Frieden und Sicherheit</li>
+                        </ul>
+                    </div>
+                    <div class="legal-status">
+                        ⚠️ In vielen Ländern illegal oder streng überwacht
+                    </div>
+                </div>
+
+                <!-- Faschismus -->
+                <div class="ideology-card faschismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon">F</div>
+                        <h3 class="ideology-title">Faschismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Faschismus ist eine Ideologie, die einen starken Staat, zentrale Macht, strenge Ordnung und oft einen Führerkult betont. Individualrechte sind zweitrangig gegenüber dem Staat.
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Historische Beispiele</h4>
+                        <p>Italien 1922–1943, Deutschland 1933–1945, Spanien, Portugal, Japan 20. Jahrhundert</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Vermeintliche Vorteile</h4>
+                        <ul>
+                            <li>Starke Ordnung und Stabilität</li>
+                            <li>Rasche Entscheidungsprozesse</li>
+                            <li>Nationaler Zusammenhalt</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Nachteile</h4>
+                        <ul>
+                            <li>Unterdrückung von Meinungen und Freiheit</li>
+                            <li>Gewalt gegen Andersdenkende</li>
+                            <li>Menschenrechte stark eingeschränkt</li>
+                            <li>Keine echte Demokratie</li>
+                        </ul>
+                    </div>
+                    <div class="legal-status">
+                        ⚠️ In vielen Ländern verboten oder unter Beobachtung (z.B. Verfassungsschutz)
+                    </div>
+                </div>
+
+                <!-- Islamismus -->
+                <div class="ideology-card islamismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon">I</div>
+                        <h3 class="ideology-title">Islamismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Islamismus will den Islam als Grundlage für Politik und Staat. Es geht nicht nur um Religion, sondern auch um Macht und Gesetzgebung nach der Scharia.
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Aktuelle Beispiele</h4>
+                        <p>Iran, Afghanistan, Saudi-Arabien 2025</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Für Anhänger</h4>
+                        <ul>
+                            <li>Gibt Identität und moralische Leitlinien</li>
+                            <li>Fördert Gemeinschaftsgefühl</li>
+                            <li>Klare Orientierung im Alltag</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Nachteile</h4>
+                        <ul>
+                            <li>Keine Religionsfreiheit</li>
+                            <li>Frauen- und Menschenrechte oft eingeschränkt</li>
+                            <li>In radikaler Form oft gewalttätig</li>
+                        </ul>
+                    </div>
+                    <div class="legal-status">
+                        ⚠️ Radikale Gruppen wie IS oder Al-Qaida sind terroristisch. In Deutschland vom Staatsschutz überwacht.
+                    </div>
+                </div>
+
+                <!-- Kommunismus -->
+                <div class="ideology-card kommunismus">
+                    <div class="ideology-header">
+                        <div class="ideology-icon">K</div>
+                        <h3 class="ideology-title">Kommunismus</h3>
+                    </div>
+                    <p class="ideology-description">
+                        Kommunismus ist eine Ideologie, die eine klassenlose Gesellschaft ohne Privateigentum an Produktionsmitteln anstrebt. Alles soll gemeinsam gehören und gerecht verteilt werden.
+                    </p>
+                    <div class="ideology-examples">
+                        <h4>Historische & Aktuelle Beispiele</h4>
+                        <p>Russische Revolution 1917, China 1949, Kuba 1959, DDR 1949–1990<br>
+                        Heute: China, Kuba, Nordkorea (abgewandelt)</p>
+                    </div>
+                    <div class="pros">
+                        <h4>Ziele</h4>
+                        <ul>
+                            <li>Soziale Gleichheit und Gerechtigkeit</li>
+                            <li>Keine großen Unterschiede zwischen Arm und Reich</li>
+                            <li>Fokus auf Gemeinschaft und Zusammenarbeit</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h4>Praktische Probleme</h4>
+                        <ul>
+                            <li>Oft starke staatliche Kontrolle</li>
+                            <li>Wenig individuelle Freiheit in Wirtschaft und Politik</li>
+                            <li>In der Praxis oft Mangelwirtschaft und Unterdrückung</li>
+                        </ul>
+                    </div>
+                    <div class="legal-status">
+                        ⚠️ In manchen Ländern können kommunistische Bewegungen vom Staatsschutz beobachtet werden
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Politisches Sheet. Bildungsmaterial für politische Ideologien.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.8)';
+            }
+        });
+
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.ideology-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
